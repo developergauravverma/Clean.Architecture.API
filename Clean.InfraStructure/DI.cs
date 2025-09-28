@@ -1,18 +1,20 @@
 ﻿using Clean.Core.Interfaces;
+using Clean.Core.Options;
 using Clean.InfraStructure.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 namespace Clean.InfraStructure
 {
     public static class DI
     {
-        public static IServiceCollection AddInfraStructureDI(this IServiceCollection services, IConfigurationManager config)
+        public static IServiceCollection AddInfraStructureDI(this IServiceCollection services, IConfiguration config)
         {
-            services.AddDbContext<Data.AppDBContext>(options =>
+            services.AddDbContext<Data.AppDBContext>((provider,options) =>
             {
-                options.UseSqlServer(config.GetConnectionString("DefaultConnection"));
+                options.UseSqlServer(provider.GetRequiredService<IOptionsSnapshot<ConnectionStringOptions>>().Value.DefaultConnection);
             });
             services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             return services;
