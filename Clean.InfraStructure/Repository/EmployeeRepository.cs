@@ -66,7 +66,7 @@ namespace Clean.InfraStructure.Repository
             await _context.Database.BeginTransactionAsync();
             try
             {
-                var employee = _context.Employees.FirstOrDefault(e => e.EmployeeId == id);
+                var employee = await _context.Employees.FirstOrDefaultAsync(e => e.EmployeeId == id);
                 if (employee != null)
                 {
                     _context.Employees.Remove(employee);
