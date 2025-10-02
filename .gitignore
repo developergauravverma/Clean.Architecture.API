@@ -53,3 +53,5 @@ CodeCoverage/
 TestResult.xml
 nunit-*.xml
 /.vs/Clean.Architecture
+/.vs/ProjectEvaluation
+/Clean.API/Clean.API.csproj.user

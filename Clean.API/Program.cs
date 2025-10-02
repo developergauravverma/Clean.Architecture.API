@@ -7,17 +7,21 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.WebHost.ConfigureKestrel(options =>
 {
-    options.ListenAnyIP(8080); // Container port
+    options.ListenAnyIP(8080); // HTTP
+    options.ListenAnyIP(8081, listenOptions =>
+    {
+        listenOptions.UseHttps(); // requires certs
+    });
 });
 
 var configuration = builder.Configuration;
 
 // Add services to the container.
 
+builder.Services.AddAPIDI(configuration);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddAPIDI(configuration);
 
 var app = builder.Build();
 
@@ -31,6 +35,8 @@ app.UseSwaggerUI(c =>
 //}
 
 // Configure the HTTP request pipeline.
+
+app.AddAPIDI();
 
 app.UseHttpsRedirection();
 
